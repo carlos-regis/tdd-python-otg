@@ -8,9 +8,74 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 selenium = "<4"
-django = "<1.12"
-
+django = "<2.2"
+urllib3 = "<2"
 
 [build-system]
-requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+requires = [
+  "poetry-core",
+]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+(
+      docs
+    | migrations
+    | static/CACHE/
+)
+'''
+
+[tool.ruff]
+cache-dir = "~/.cache/ruff"
+fix = true
+target-version = "py311"
+show-fixes = true
+show-source = true
+select = [
+  "A",   # flake8-builtins
+  "B",   # flake8-bugbear
+  "C",   # flake8-comprehensions
+  "E",   # pycodestyle errors
+  "DJ",  # flake8-django
+  "F",   # pyflakes
+  "I",   # isort
+  "N",   # pep8-naming
+  "PT",  # flake8-pytest-style
+  "PL",  # pylint
+  "Q",   # flake8-quotes
+  "RUF", # ruff
+  "UP",  # pyupgrade
+  "W",   # pycodestyle warnings
+]
+ignore = [
+  "E501",  # line too long, handled by black
+]
+extend-exclude = [
+  "**/migrations/*",
+  "**/static/CACHE/*",
+  "docs",
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F403"]
+# "path/to/file.py" = ["E402"]
+# "**/{tests,docs,tools}/*" = ["E402"]
+
+# [tool.ruff.isort]
+# known-third-party = ["fastapi", "pydantic", "starlette"]
+
+[tool.bandit]
+exclude_dirs = ["tests", "settings.py"]
+# tests = ["B201", "B301"]
+# skips = ["B101", "B601"]
+
+[tool.djlint]
+profile="django"
+
+[tool.codespell]
+write-changes = true
+ignore-words-list = "asend"

@@ -1,0 +1,159 @@
+default_language_version:
+  python: python3.11
+exclude: .*migrations\/.*|.git
+minimum_pre_commit_version: 3.2.1
+default_stages: [commit, push]
+
+repos:
+  # Automatically fix issues
+
+  ## Codespell - check for common misspellings in files
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.5
+    hooks:
+      - id: codespell
+        language: python
+        types: [ text ]
+        args: [--toml=pyproject.toml]
+        exclude: "poetry.lock"
+        additional_dependencies:
+          - tomli
+
+  ## Markdown
+  - repo: https://github.com/frnmst/md-toc
+    rev: 8.2.0
+    hooks:
+      - id: md-toc
+        args: [-p, 'cmark', '-l6']
+
+  ## Python, TOML, Polyglot, Git
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      ### Automatically fix issues
+      - id: end-of-file-fixer
+        stages: [commit]
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+        files: "\\.(py|txt|yaml|json|md|toml|lock|cfg|html|sh|js|yml)$"
+        args:
+        - --fix=crlf
+      - id: trailing-whitespace
+        stages: [commit]
+        args: [ --markdown-linebreak-ext=md ]
+        files: "\\.(py|txt|yaml|json|md|toml|lock|cfg|html|sh|js|yml)$"
+
+      ### Check for issues
+      - id: check-added-large-files
+        args: [--enforce-all]
+        stages: [commit]
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+        stages: [commit]
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-vcs-permalinks
+      - id: destroyed-symlinks
+      - id: detect-aws-credentials
+        args: [--allow-missing-credentials]
+      - id: detect-private-key
+      - id: forbid-submodules
+      - id: no-commit-to-branch
+        stages: [commit]
+        args: ['--pattern', '^(?!((fix|feat|refactor|docs)(\/\d+\-)[\w-]+)$).*']
+
+      - id: check-yaml
+        args: [--unsafe]
+      - id: pretty-format-json
+        args: [--autofix, --no-ensure-ascii, --no-sort-keys]
+      - id: check-json
+      - id: debug-statements
+      - id: check-docstring-first
+
+  # Check for issues
+
+  ## Pre-commit config
+  - repo: meta
+    hooks:
+      - id: check-useless-excludes
+      # - id: check-hooks-apply
+
+  ## Git
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: 3.8.2
+    hooks:
+      - id: commitizen
+      # - id: commitizen-branch
+      #   stages:
+      #     - post-commit
+      #     - post-rewrite
+      #     - push
+
+  ## CR
+  - repo: https://github.com/adamchainz/django-upgrade
+    rev: 1.14.1
+    hooks:
+    -   id: django-upgrade
+        args: [
+          --target-version, "4.2"
+        ]
+
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: 1.1.0
+    hooks:
+      - id: pyproject-fmt
+
+  # formatter and linter for HTML templates
+  - repo: https://github.com/Riverside-Healthcare/djLint
+    rev: v1.32.1
+    hooks:
+      - id: djlint-django
+
+  - repo: https://github.com/bridgecrewio/checkov.git
+    rev: 2.4.33
+    hooks:
+      - id: checkov
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.0.289
+    hooks:
+      - id: ruff
+        args: [
+          --config=pyproject.toml,
+        ]
+
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 23.9.1
+    hooks:
+    - id: black
+      args: [
+        --check,
+        --diff,
+        --color,
+        --config=pyproject.toml
+      ]
+
+  - repo: https://github.com/adamchainz/blacken-docs
+    rev: 1.16.0
+    hooks:
+    - id: blacken-docs
+      additional_dependencies:
+      - black==23.7.0
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+    - id: bandit
+      args: ["-c", "pyproject.toml", "-r", ".", ]
+      additional_dependencies: ["bandit[toml]"]
+
+  # Git commit message linter, checks your commit messages for style.
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.19.1
+    hooks:
+    - id: gitlint
+
+ci:
+  autofix_prs: false
+  autofix_commit_msg: 🎨 [pre-commit.ci] auto fixes from pre-commit.com hooks
