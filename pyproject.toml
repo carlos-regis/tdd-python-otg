@@ -8,8 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 selenium = "<4"
-django = "<1.12"
-
+django = "<2.2"
+urllib3 = "<2"
 
 [build-system]
 requires = ["poetry-core"]
