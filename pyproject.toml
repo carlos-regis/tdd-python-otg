@@ -10,6 +10,7 @@ python = "^3.11"
 selenium = "<4.4.0"
 django = "<3.0"
 urllib3 = "<2"
+pre-commit = "^3.4.0"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
