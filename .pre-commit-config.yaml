@@ -1,7 +1,7 @@
 default_language_version:
   python: python3.11
 exclude: .*migrations\/.*|.git
-minimum_pre_commit_version: 3.2.1
+minimum_pre_commit_version: 3.4.0
 default_stages: [commit, push]
 
 repos:
