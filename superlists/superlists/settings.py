@@ -10,20 +10,25 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import environ
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = environ.Path(__file__) - 2
+
+env = environ.Env(DEBUG=(bool, False))
+env.prefix = "DJANGO_"
+
+environ.Env.read_env(BASE_DIR(".env"))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "cy1!wh&8av)g9oe&6p(95cjf%0#7qu-gl&i2xg+^fkldd^tooo"
+SECRET_KEY = env("SECRET_KEY")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = []
 
@@ -75,12 +80,17 @@ WSGI_APPLICATION = "superlists.wsgi.application"
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    }
+    # "default": env.db(),
+    # "extra": env.db_url("SQLITE_URL"),
+    "default": env.db_url("SQLITE_URL")
 }
 
+# CACHES = {
+#     # The cache() method is an alias for cache_url().
+#     "default": env.cache(),
+#     # read os.environ['REDIS_URL']
+#     "redis": env.cache_url("REDIS_URL"),
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -110,7 +120,6 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-
 USE_TZ = True
 
 
@@ -118,3 +127,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
