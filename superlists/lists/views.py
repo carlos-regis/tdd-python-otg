@@ -1,6 +1,6 @@
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
 
-def home_page(request) -> HttpResponse:
-    return render(request, "home.html")
+def home_page(request: HttpRequest) -> HttpResponse:
+    return render(request, "home.html", {"new_item_text": request.POST.get("item_text", "")})
