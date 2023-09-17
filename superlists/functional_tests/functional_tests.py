@@ -7,21 +7,18 @@ from selenium.webdriver.common.keys import Keys
 
 
 class NewVisitorTest(unittest.TestCase):
-    def setUp(self) -> None:
+    def setUp(self):
         self.browser = webdriver.Firefox()
 
-    def tearDown(self) -> None:
+    def tearDown(self):
         self.browser.quit()
 
-    def check_for_row_in_list_table(self, row_text) -> None:
+    def check_for_row_in_list_table(self, row_text):
         table = self.browser.find_element(By.ID, "id_list_table")
         rows = table.find_elements(By.TAG_NAME, "tr")
-        self.assertIn(  # noqa: PT009
-            row_text,
-            [row.text for row in rows],
-        )
+        self.assertIn(row_text, [row.text for row in rows])  # noqa: PT009
 
-    def test_can_start_a_list_and_retrieve_it_later(self) -> None:
+    def test_can_start_a_list_and_retrieve_it_later(self):
         # Edith has heard about a cool new online to-do app.
         # She goes to checkout its homepage
         self.browser.get("http://localhost:8000")
